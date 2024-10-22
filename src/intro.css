@@ -1,0 +1,124 @@
+.intro-home,
+.intro-video,
+.intro-tuto {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: var(--index-bg-2);
+}
+
+.intro-home {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 5vh;
+}
+
+.intro-home__img {
+    width: 60vw;
+    height: auto;
+    object-fit: contain;
+    aspect-ratio: 16/9;
+    visibility: visible;
+}
+
+.intro-home__text {
+    width: clamp(300px, 40vw, 600px);
+    font-size: clamp(24px, 4vw, 48px);
+    line-height: 64px;
+    text-align: center;
+    margin: 0;
+    margin-top: 90px;
+    visibility: visible;
+}
+
+.intro-home__text .sign {
+    transform: translateY(10px);
+}
+
+.sign {
+    display: inline-block;
+    width: 61px;
+    height: 60px;
+    background-image: url('./assets/ui/orange-circle.svg');
+}
+
+.intro-video {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    visibility: hidden;
+}
+
+.intro-video__video {
+    height: 100%;
+    width: auto;
+    object-fit: contain;
+    aspect-ratio: 16/9;
+}
+
+.intro-tuto {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.intro-tuto__wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+}
+
+.intro-tuto__signs {
+    display: flex;
+    gap: 20px;
+}
+
+.intro-tuto__text {
+    margin: 0;
+    font-size: 32px;
+    transform: translateY(-10%);
+}
+
+.visibility {
+    visibility: visible;
+}
+.hidden {
+    visibility: hidden;
+}
+.fade-in {
+    animation: fade-in 0.5s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+}
+.fade-out {
+    animation: fade-out 0.5s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+}
+
+@keyframes fade-in {
+    0% {
+        visibility: hidden;
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+        visibility: visible;
+    }
+}
+@keyframes fade-out {
+    0% {
+        visibility: visible;
+        opacity: 1;
+        transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-20px);
+        visibility: hidden;
+    }
+}

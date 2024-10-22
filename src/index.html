@@ -4,20 +4,48 @@
         <meta charset="UTF-8" />
         <title>Pète un coup !</title>
         <link rel="stylesheet" href="style.css" />
+        <link rel="stylesheet" href="intro.css" />
         <link rel="icon" href="./assets/icons/chou-1.svg" type="image/x-icon" />
     </head>
 
     <body>
-        <div id="bg"></div>
+        <div class="background-wrapper">
+            <img src="./assets/images/sky.png" class="background-wrapper__sky" />
+        </div>
+        <!-- <div class="intro">
+            <div class="intro-home">
+                <img class="intro-home__img" src="./assets/start-screen.webp" />
+                <h1 class="intro-home__text">
+                    <span>appuie sur</span>
+                    <span class="sign">
+                        <img src="./assets/ui/x-sign.svg" />
+                    </span>
+                    <span>ça te fera tout drôle au croupion</span>
+                </h1>
+            </div>
+            <div class="intro-video hidden">
+                <video class="intro-video__video" autoplay muted>
+                    <source src="./assets/videos/spirale.mp4" type="video/mp4" />
+                </video>
+            </div>
+            <div class="intro-tuto hidden">
+                <div class="intro-tuto__wrapper">
+                    <div class="intro-tuto__signs">
+                        <span class="sign">
+                            <img src="./assets/ui/x-sign.svg" />
+                        </span>
+                        <span class="sign">
+                            <img src="./assets/ui/x-sign.svg" />
+                        </span>
+                    </div>
+                    <p class="intro-tuto__text">reste dans le rythme</p>
+                </div>
+            </div>
+        </div> -->
         <div class="active char1 char"></div>
         <div class="active char2 char"></div>
         <div class="char1Fart char"></div>
         <div class="char2Fart char"></div>
-        <div class="ui">
-            <div class="start">
-                <h1>Appuyer sur A pour commencer</h1>
-            </div>
-        </div>
         <canvas id="scene"></canvas>
     </body>
 </html>

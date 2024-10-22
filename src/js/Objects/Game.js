@@ -5,6 +5,7 @@ import Hold from './Hold.js';
 import MelodyPlayer from './MelodyPlayer.js';
 import { AudioManager } from '../AudioManager.js';
 import { player1 } from '../BorneManager/borneManager.js';
+import Intro from './Intro.js';
 
 export default class Game {
     static instance;
@@ -35,6 +36,7 @@ export default class Game {
         // this.setMelodyPlayer();
         // Need click to allow audioContext, remove when startingpage completed
         player1.buttons[0].addEventListener('keydown', this.setMelodyPlayer);
+        // player1.buttons[0].addEventListener('keydown', this.setIntroScene);
         this.createTargets();
         this.setStaticObjects();
         this.app.stage.addChild(this.targetsContainer);
@@ -47,6 +49,13 @@ export default class Game {
             player1.buttons[0].removeEventListener('keydown', this.setMelodyPlayer);
         }
         this.hasStarted = true;
+    }
+
+    setIntroScene() {
+        const intro = new Intro();
+        intro.init();
+
+        player1.buttons[0].removeEventListener('keydown', this.setIntroScene);
     }
 
     setStaticObjects() {
