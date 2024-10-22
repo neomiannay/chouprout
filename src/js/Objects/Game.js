@@ -17,7 +17,7 @@ export default class Game {
         this.playersHaveLost = false;
         this.targetsContainer = new PIXI.Container();
         this.targets = {};
-        //TODO: keep two arrays, one per player and keep track for each target of success.
+        // TODO: keep two arrays, one per player and keep track for each target of success.
         // Example : if player1 has hit the two first targets correctly and misses the third score should be score {1: [1, 1, 0] }
         // At the end of a sequence compute points by looping through both arrays and check both player have a score of 1 at index i to grant a point.
         // defeat condition should be if 90% of targets have been hit correctly by both players
@@ -32,12 +32,11 @@ export default class Game {
     }
 
     init() {
-        //this.setMelodyPlayer();
+        // this.setMelodyPlayer();
         // Need click to allow audioContext, remove when startingpage completed
         player1.buttons[0].addEventListener('keydown', this.setMelodyPlayer);
-
-        this.setStaticObjects();
         this.createTargets();
+        this.setStaticObjects();
         this.app.stage.addChild(this.targetsContainer);
     }
 

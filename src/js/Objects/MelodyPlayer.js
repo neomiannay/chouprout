@@ -171,24 +171,6 @@ export default class MelodyPlayer {
                         lastChouStartTime = note.tick;
                         lastChouDuration = chouDuration;
                     }
-                    // } else {
-                    //     //Chou type === Mix
-
-                    //     /**
-                    //      * TO DO : Create choux duration logic
-                    //      *
-                    //      */
-
-                    //     const chouDuration = Math.random() * 2000 + 3000;
-
-                    //     choux.push({
-                    //         type: 'Mix',
-                    //         tick: note.tick,
-                    //         duration: chouDuration,
-                    //     });
-                    //     lastChouStartTime = note.tick;
-                    //     lastChouDuration = chouDuration;
-                    // }
                 }
             }
         }
