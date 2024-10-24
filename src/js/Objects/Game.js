@@ -50,7 +50,7 @@ export default class Game {
         // this.setMelodyPlayer();
         // Need click to allow audioContext, remove when startingpage completed
         // player1.buttons[0].addEventListener('keydown', this.setMelodyPlayer);
-        this.setStaticObjects();
+        // this.setStaticObjects();
         player1.buttons[0].addEventListener('keydown', this.setIntroScene);
         this.app.stage.addChild(this.targetsContainer);
     }
@@ -84,7 +84,6 @@ export default class Game {
         hitZone.y = timelineY;
         hitZone.scale.set(HIT_ZONE_SIZE * ASPECT_RATIO);
         hitZone.alpha = 0;
-        hitZone.zIndex = 1;
         this.app.stage.addChild(hitZone);
 
         // Timeline
@@ -97,7 +96,7 @@ export default class Game {
         timeline.alpha = 0;
         this.app.stage.addChild(timeline);
 
-        gsap.to([hitZone, timeline], { duration: 1, alpha: 1, ease: 'power2.out', zIndex: 1 });
+        gsap.to([hitZone, timeline], { duration: 1, alpha: 1, ease: 'power2.out' });
 
         // set the size of the lottie animation
         const lottieContainer = document.getElementById('lottie');

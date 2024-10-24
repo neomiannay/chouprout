@@ -38,37 +38,42 @@ export default class Intro {
                 this.introHome.style.visibility = 'hidden';
 
                 // Animation fade-in de l'intro-video
-                this.introVideo.style.visibility = 'visible';
-                gsap.fromTo(
-                    this.introVideo,
-                    { opacity: 0, y: 20 },
-                    { opacity: 1, y: 0, duration: 0.5 }
-                );
-                this.videoElement.play();
+                // this.introVideo.style.visibility = 'visible';
+                // gsap.fromTo(
+                //     this.introVideo,
+                //     { opacity: 0, y: 20 },
+                //     { opacity: 1, y: 0, duration: 0.5 }
+                // );
+                // this.videoElement.play();
             },
         });
 
-        // Transition après la fin de la vidéo
-        this.videoElement.addEventListener('ended', () => {
-            gsap.to(this.introVideo, {
-                opacity: 0,
-                y: -20,
-                duration: 0.5,
-                onComplete: () => {
-                    this.introVideo.style.visibility = 'hidden';
+        // // Transition après la fin de la vidéo
+        // this.videoElement.addEventListener('ended', () => {
+        //     gsap.to(this.introVideo, {
+        //         opacity: 0,
+        //         y: -20,
+        //         duration: 0.5,
+        //         onComplete: () => {
+        //             this.introVideo.style.visibility = 'hidden';
 
-                    // Animation fade-in de l'intro-tuto
-                    this.introTuto.style.visibility = 'visible';
-                    gsap.fromTo(
-                        this.introTuto,
-                        { opacity: 0, y: 20 },
-                        { opacity: 1, y: 0, duration: 0.5 }
-                    );
+        //             // Animation fade-in de l'intro-tuto
+        //             this.introTuto.style.visibility = 'visible';
+        //             gsap.fromTo(
+        //                 this.introTuto,
+        //                 { opacity: 0, y: 20 },
+        //                 { opacity: 1, y: 0, duration: 0.5 }
+        //             );
 
-                    player1.buttons[0].addEventListener('keydown', this.animateParallax);
-                },
-            });
-        });
+        //             player1.buttons[0].addEventListener('keydown', this.animateParallax);
+        //         },
+        //     });
+        // });
+
+        this.introTuto.style.visibility = 'visible';
+        gsap.fromTo(this.introTuto, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5 });
+
+        player1.buttons[0].addEventListener('keydown', this.animateParallax);
     }
 
     // Fonction pour animer le parallax

@@ -17,6 +17,7 @@
   "dependencies": {
     "@babel/plugin-proposal-class-properties": "^7.18.6",
     "@babel/runtime": "^7.8.4",
+    "@lottiefiles/dotlottie-web": "^0.35.0",
     "axis-api": "github:gobelins-axis/axis-api",
     "core-js": "^3.6.4",
     "gsap": "^3.12.5",

@@ -9,6 +9,8 @@
     --color-main: #fff;
     --color-background: #000;
     --color-accent: #de8a2d;
+    --vh: 100vh;
+    --vw: 100vw;
 }
 
 @font-face {
@@ -82,7 +84,7 @@ canvas {
 }
 
 .char2 {
-    background-image: url('./assets/images/characters/yellow-test.png');
+    background-image: url('./assets/images/characters/yellow-rest.png');
 }
 
 .char1Fart {

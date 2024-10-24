@@ -1,7 +1,7 @@
 export const radius = 100;
 export const holdBarHeight = 25;
 export const hitZonePosition = window.innerWidth / 2;
-export const precision = 15;
+export const precision = 40;
 export const startSpeed = 5;
 export const hitRange = [hitZonePosition - precision, hitZonePosition + precision];
 export const ASPECT_RATIO = window.innerWidth / 2880;
