@@ -1,0 +1,51 @@
+{"frames": {
+
+"thunder-2-1.png":
+{
+	"frame": {"x":1494,"y":0,"w":497,"h":895},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":497,"h":895},
+	"sourceSize": {"w":497,"h":895},
+	"anchor": {"x":0,"y":0}
+},
+"thunder-2-2.png":
+{
+	"frame": {"x":0,"y":0,"w":498,"h":895},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":498,"h":895},
+	"sourceSize": {"w":498,"h":895},
+	"anchor": {"x":0,"y":0}
+},
+"thunder-2-3.png":
+{
+	"frame": {"x":498,"y":0,"w":498,"h":895},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":498,"h":895},
+	"sourceSize": {"w":498,"h":895},
+	"anchor": {"x":0,"y":0}
+},
+"thunder-2-4.png":
+{
+	"frame": {"x":996,"y":0,"w":498,"h":895},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":498,"h":895},
+	"sourceSize": {"w":498,"h":895},
+	"anchor": {"x":0,"y":0}
+}},
+"animations": {
+	"thunder-2": ["thunder-2-1.png","thunder-2-2.png","thunder-2-3.png","thunder-2-4.png"]
+},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.1",
+	"image": "sparkle-2.png",
+	"format": "RGBA8888",
+	"size": {"w":1991,"h":895},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:0b9a836e86904b3734b6c740f91a4657:a986a707f75702ca836f8857fcc7134e:5d1151bbf46cc727b57015a1b2ae57fc$"
+}
+}
