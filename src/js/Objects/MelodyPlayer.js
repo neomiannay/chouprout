@@ -67,11 +67,11 @@ export default class MelodyPlayer {
             this.currentTick = this.player.tick;
         });
 
-        //A REMOVE, C'EST PAS PROPRE, C'EST UN LOOP DE LA MELLODY POUR LA DEMO
-        this.player.on('endOfFile', () => {
-            this.game.increaseSpeed(5);
-            new MelodyPlayer(this.tempo + 30);
-        });
+        // //A REMOVE, C'EST PAS PROPRE, C'EST UN LOOP DE LA MELLODY POUR LA DEMO
+        // this.player.on('endOfFile', () => {
+        //     this.game.increaseSpeed(5);
+        //     new MelodyPlayer(this.tempo + 30);
+        // });
 
         /**
          * Autre fonction qui se lance à event du midi player;

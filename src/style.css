@@ -65,12 +65,24 @@ canvas {
     display: flex;
 }
 
+#lottie {
+    z-index: var(--index-ui);
+    position: absolute;
+    top: 80px;
+    left: 180px;
+}
+
+#lottie svg {
+    width: 100%;
+    height: 100%;
+}
+
 .char1 {
     background-image: url('./assets/images/characters/red-rest.png');
 }
 
 .char2 {
-    background-image: url('./assets/images/characters/yellow-rest-1.png');
+    background-image: url('./assets/images/characters/yellow-test.png');
 }
 
 .char1Fart {

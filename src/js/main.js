@@ -3,13 +3,16 @@ import Game from './Objects/Game.js';
 import * as PIXI from 'pixi.js';
 import { debounce } from './utils/debounce.js';
 import { longFarts, smallFarts, timelineY } from './settings.js';
+import animationOuiJSON from '../assets/lottie/oui-opti.json';
+import animationNonJSON from '../assets/lottie/non-opti.json';
+import { DotLottie } from '@lottiefiles/dotlottie-web';
 
 const createApp = async () => {
     // Create a new PixiJS application to handle canvas rendering
     const app = new PIXI.Application({
         width: window.innerWidth,
         height: window.innerHeight,
-        resolution: window.devicePixelRatio || 1, // Set resolution to match device pixel ratio
+        resolution: 1, // Set resolution to match device pixel ratio
         antialias: true, // Enable antialiasing for smoother graphics
         transparent: true,
     });
@@ -29,7 +32,10 @@ const createApp = async () => {
     const debouncedAnimateChar1 = debounce(() => animateChar(1), 500);
     const debouncedAnimateChar2 = debounce(() => animateChar(2), 500);
 
+    let playerResults = { 1: false, 2: false }; // false par défaut, indique si chaque joueur a réussi
+
     const handleButtonADown = (playerID) => {
+        // Remplacer l'appel à showProut par le stockage de résultats
         let target = game.targets[playerID][0];
         if (!target) return;
 
@@ -42,8 +48,16 @@ const createApp = async () => {
         }
 
         target.showFeedback();
-        // TODO: au lieu de showProut, faire une fonction pour stocker le résultat de chaque joueur. Puis on regarde si les 2 joueurs ont chacun réussi leur action. S'ils ont réussi tous les 2, on appelle showProut
-        if (target.isHitCorrect() && target.type === 'hit') showProut();
+
+        // Stocker le résultat du joueur
+        playerResults[playerID] = target.isHitCorrect();
+
+        // Vérifier si les deux joueurs ont réussi
+        if (playerResults[1] && playerResults[2]) {
+            const bothHitCorrect = target.type === 'hit' || target.type === 'hold';
+            showHitInfo(bothHitCorrect);
+        }
+
         if (target.isHitCorrect() && target.type === 'hold') {
             game.userIsHolding = true;
         }
@@ -56,13 +70,26 @@ const createApp = async () => {
         }
     };
 
-    // used for the target type hold -> on hold correct, should increase score += 1
     const handleButtonAUp = (playerID) => {
         const target = game.targets[playerID][0];
         if (!target) return;
+
         game.userIsHolding = false;
         target.showFeedback();
-        if (target.type === 'hold' && target.isHoldCorrect()) showProut();
+
+        // Si le joueur relâche le bouton, vérifiez le résultat et affichez l'animation appropriée
+        if (target.type === 'hold' && target.isHoldCorrect()) {
+            playerResults[playerID] = true; // Mettre à jour le résultat
+        } else {
+            playerResults[playerID] = false; // S'il n'a pas réussi
+        }
+
+        // Vérifiez si les deux joueurs ont terminé leurs actions
+        if (playerResults[1] && playerResults[2]) {
+            showHitInfo(true);
+        } else {
+            showHitInfo(false);
+        }
 
         game.audioManager.clearDebouncedPlay();
         game.audioManager.stop();
@@ -85,18 +112,21 @@ const createApp = async () => {
         app.renderer.resize(window.innerWidth, window.innerHeight);
     });
 
-    // green shape that appears on hit === success
-    const showProut = () => {
-        const texture = PIXI.Texture.from('./assets/icons/prout.svg');
-        const prout = new PIXI.Sprite(texture);
-        prout.anchor.set(0.5);
-        prout.x = window.innerWidth / 2;
-        prout.y = timelineY;
-        app.stage.addChild(prout);
+    let currentLottieAnim = null; // Store the current Lottie animation instance
 
-        setTimeout(() => {
-            app.stage.removeChild(prout);
-        }, 500);
+    // was before the showProut function
+    const showHitInfo = (succed) => {
+        // If there is an existing animation, destroy it before creating a new one
+        if (currentLottieAnim) {
+            currentLottieAnim.destroy(); // Clean up the previous animation
+        }
+
+        currentLottieAnim = new DotLottie({
+            canvas: document.getElementById('lottie'),
+            data: succed ? animationOuiJSON : animationNonJSON,
+            loop: false,
+            autoplay: true,
+        });
     };
 };
 createApp();

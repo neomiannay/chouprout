@@ -3,10 +3,10 @@ import {
     radius,
     hitZonePosition,
     numOfTargets,
-    hitRange,
     timelineY,
     arrowTypes,
     startSpeed,
+    ASPECT_RATIO,
 } from '../settings.js';
 import Hit from './Hit.js';
 import Hold from './Hold.js';
@@ -15,6 +15,9 @@ import { AudioManager } from '../AudioManager.js';
 import { player1 } from '../BorneManager/borneManager.js';
 import Intro from './Intro.js';
 import gsap from 'gsap';
+
+const HIT_ZONE_SIZE = 2;
+const TIMELINE_SIZE = 2;
 
 export default class Game {
     static instance;
@@ -47,7 +50,7 @@ export default class Game {
         // this.setMelodyPlayer();
         // Need click to allow audioContext, remove when startingpage completed
         // player1.buttons[0].addEventListener('keydown', this.setMelodyPlayer);
-
+        this.setStaticObjects();
         player1.buttons[0].addEventListener('keydown', this.setIntroScene);
         this.app.stage.addChild(this.targetsContainer);
     }
@@ -79,7 +82,9 @@ export default class Game {
         hitZone.anchor.set(0.5, 0.5);
         hitZone.x = hitZonePosition;
         hitZone.y = timelineY;
+        hitZone.scale.set(HIT_ZONE_SIZE * ASPECT_RATIO);
         hitZone.alpha = 0;
+        hitZone.zIndex = 1;
         this.app.stage.addChild(hitZone);
 
         // Timeline
@@ -88,10 +93,18 @@ export default class Game {
         timeline.anchor.set(0.5, 0.5);
         timeline.x = hitZonePosition;
         timeline.y = timelineY;
+        timeline.scale.set(TIMELINE_SIZE * ASPECT_RATIO);
         timeline.alpha = 0;
         this.app.stage.addChild(timeline);
 
-        gsap.to([hitZone, timeline], { duration: 1, alpha: 1, ease: 'power2.out' });
+        gsap.to([hitZone, timeline], { duration: 1, alpha: 1, ease: 'power2.out', zIndex: 1 });
+
+        // set the size of the lottie animation
+        const lottieContainer = document.getElementById('lottie');
+        const crossProductW = (window.innerWidth * 228) / 1920;
+        const crossProductH = (window.innerHeight * 228) / 1080;
+        lottieContainer.style.width = `${crossProductW}px`;
+        lottieContainer.style.height = `${crossProductH}px`;
     }
 
     createTargets() {
