@@ -44,6 +44,17 @@
     width: 61px;
     height: 60px;
     background-image: url('./assets/ui/orange-circle.svg');
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+.sign-big {
+    width: 81px;
+    height: 80px;
+}
+.sign-big img {
+    width: 100%;
+    height: auto;
 }
 
 .intro-video {
@@ -56,15 +67,16 @@
 
 .intro-video__video {
     height: 100%;
-    width: auto;
-    object-fit: contain;
-    aspect-ratio: 16/9;
+    width: 100%;
+    object-fit: cover;
+    aspect-ratio: 16/10;
 }
 
 .intro-tuto {
     display: flex;
     align-items: center;
     justify-content: center;
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
 .intro-tuto__wrapper {
@@ -81,7 +93,7 @@
 
 .intro-tuto__text {
     margin: 0;
-    font-size: 32px;
+    font-size: 48px;
     transform: translateY(-10%);
 }
 

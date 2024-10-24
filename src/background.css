@@ -1,0 +1,43 @@
+.background-wrapper__sky {
+    width: 100%;
+    height: auto;
+}
+
+.background-scene {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: auto;
+}
+
+.background-scene {
+    height: 100%;
+}
+
+.background-scene__forest-1,
+.background-scene__forest-2,
+.background-scene__forest-3,
+.background-scene__floor {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: auto;
+}
+
+.background-scene {
+    z-index: var(--index-bg-1);
+}
+.background-scene__forest-1 {
+    z-index: var(--index-bg-2);
+}
+.background-scene__forest-2 {
+    z-index: var(--index-bg-3);
+}
+.background-scene__forest-3 {
+    z-index: var(--index-bg-4);
+}
+.background-scene__floor {
+    z-index: var(--index-bg-5);
+}

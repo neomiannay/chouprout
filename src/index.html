@@ -5,47 +5,54 @@
         <title>Pète un coup !</title>
         <link rel="stylesheet" href="style.css" />
         <link rel="stylesheet" href="intro.css" />
+        <link rel="stylesheet" href="background.css" />
         <link rel="icon" href="./assets/icons/chou-1.svg" type="image/x-icon" />
     </head>
 
     <body>
         <div class="background-wrapper">
             <img src="./assets/images/sky.png" class="background-wrapper__sky" />
+            <div class="background-scene">
+                <img src="./assets/images/forest-1.png" class="background-scene__forest-1 hidden" />
+                <img src="./assets/images/forest-2.png" class="background-scene__forest-2 hidden" />
+                <img src="./assets/images/forest-3.png" class="background-scene__forest-3 hidden" />
+                <img src="./assets/images/floor.png" class="background-scene__floor hidden" />
+            </div>
         </div>
-        <!-- <div class="intro">
+        <div class="intro">
             <div class="intro-home">
-                <img class="intro-home__img" src="./assets/start-screen.webp" />
+                <img class="intro-home__img" src="./assets/images/logo.png" />
                 <h1 class="intro-home__text">
                     <span>appuie sur</span>
                     <span class="sign">
-                        <img src="./assets/ui/x-sign.svg" />
+                        <img src="./assets/ui/a-sign.svg" />
                     </span>
                     <span>ça te fera tout drôle au croupion</span>
                 </h1>
             </div>
             <div class="intro-video hidden">
-                <video class="intro-video__video" autoplay muted>
+                <video class="intro-video__video" muted>
                     <source src="./assets/videos/spirale.mp4" type="video/mp4" />
                 </video>
             </div>
             <div class="intro-tuto hidden">
                 <div class="intro-tuto__wrapper">
                     <div class="intro-tuto__signs">
-                        <span class="sign">
-                            <img src="./assets/ui/x-sign.svg" />
+                        <span class="sign sign-big">
+                            <img src="./assets/ui/a-sign.svg" />
                         </span>
-                        <span class="sign">
+                        <span class="sign sign-big">
                             <img src="./assets/ui/x-sign.svg" />
                         </span>
                     </div>
                     <p class="intro-tuto__text">reste dans le rythme</p>
                 </div>
             </div>
-        </div> -->
-        <div class="active char1 char"></div>
-        <div class="active char2 char"></div>
-        <div class="char1Fart char"></div>
-        <div class="char2Fart char"></div>
+        </div>
+        <div class="active char char1 hidden"></div>
+        <div class="active char char2 hidden"></div>
+        <div class="char char1Fart"></div>
+        <div class="char char2Fart"></div>
         <canvas id="scene"></canvas>
     </body>
 </html>

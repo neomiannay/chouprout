@@ -1,11 +1,20 @@
 import * as PIXI from 'pixi.js';
-import { radius, hitZonePosition, numOfTargets, hitRange, timelineY, arrowTypes, startSpeed } from '../settings.js';
+import {
+    radius,
+    hitZonePosition,
+    numOfTargets,
+    hitRange,
+    timelineY,
+    arrowTypes,
+    startSpeed,
+} from '../settings.js';
 import Hit from './Hit.js';
 import Hold from './Hold.js';
 import MelodyPlayer from './MelodyPlayer.js';
 import { AudioManager } from '../AudioManager.js';
 import { player1 } from '../BorneManager/borneManager.js';
 import Intro from './Intro.js';
+import gsap from 'gsap';
 
 export default class Game {
     static instance;
@@ -13,6 +22,7 @@ export default class Game {
         if (Game.instance) {
             return Game.instance; // Return existing instance if already created
         }
+        this.introStarted = true;
         this.hasStarted = false;
         this.isDone = false;
         this.playersHaveLost = false;
@@ -28,6 +38,7 @@ export default class Game {
         this.speed = startSpeed;
         this.audioManager = new AudioManager();
         this.setMelodyPlayer = this.setMelodyPlayer.bind(this);
+        this.setIntroScene = this.setIntroScene.bind(this);
         this.melodyPlayer = null;
         Game.instance = this;
     }
@@ -35,27 +46,30 @@ export default class Game {
     init() {
         // this.setMelodyPlayer();
         // Need click to allow audioContext, remove when startingpage completed
-        player1.buttons[0].addEventListener('keydown', this.setMelodyPlayer);
-        // player1.buttons[0].addEventListener('keydown', this.setIntroScene);
+        // player1.buttons[0].addEventListener('keydown', this.setMelodyPlayer);
+
+        player1.buttons[0].addEventListener('keydown', this.setIntroScene);
+        this.app.stage.addChild(this.targetsContainer);
+    }
+
+    setIntroScene() {
+        console.log('ntm');
+        const intro = new Intro();
+        intro.init();
+        player1.buttons[0].removeEventListener('keydown', this.setIntroScene);
+    }
+
+    startGame() {
+        this.setMelodyPlayer();
         this.createTargets();
         this.setStaticObjects();
-        this.app.stage.addChild(this.targetsContainer);
     }
 
     setMelodyPlayer() {
         if (!this.melodyPlayer) {
             this.melodyPlayer = new MelodyPlayer(90);
-            document.querySelector('.start').style.display = 'none';
             player1.buttons[0].removeEventListener('keydown', this.setMelodyPlayer);
         }
-        this.hasStarted = true;
-    }
-
-    setIntroScene() {
-        const intro = new Intro();
-        intro.init();
-
-        player1.buttons[0].removeEventListener('keydown', this.setIntroScene);
     }
 
     setStaticObjects() {
@@ -65,6 +79,7 @@ export default class Game {
         hitZone.anchor.set(0.5, 0.5);
         hitZone.x = hitZonePosition;
         hitZone.y = timelineY;
+        hitZone.alpha = 0;
         this.app.stage.addChild(hitZone);
 
         // Timeline
@@ -73,7 +88,10 @@ export default class Game {
         timeline.anchor.set(0.5, 0.5);
         timeline.x = hitZonePosition;
         timeline.y = timelineY;
+        timeline.alpha = 0;
         this.app.stage.addChild(timeline);
+
+        gsap.to([hitZone, timeline], { duration: 1, alpha: 1, ease: 'power2.out' });
     }
 
     createTargets() {
