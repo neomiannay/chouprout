@@ -10,9 +10,9 @@ import {
 } from '../settings.js';
 import MelodyPlayer from './MelodyPlayer.js';
 import { AudioManager } from '../AudioManager.js';
-import { player1 } from '../BorneManager/borneManager.js';
 import Intro from './Intro.js';
 import gsap from 'gsap';
+import Player from './Player.js';
 
 const HIT_ZONE_SIZE = 2;
 const TIMELINE_SIZE = 2;
@@ -33,7 +33,7 @@ export default class Game {
         // Example : if player1 has hit the two first targets correctly and misses the third score should be score {1: [1, 1, 0] }
         // At the end of a sequence compute points by looping through both arrays and check both player have a score of 1 at index i to grant a point.
         // defeat condition should be if 90% of targets have been hit correctly by both players
-        this.score = {};
+        this.score = 0;
         this.app = app;
         this.speed = startSpeed;
         this.audioManager = new AudioManager();
@@ -42,8 +42,9 @@ export default class Game {
         this.melodyPlayer = null;
         this.notes = [];
         this.numOfTargets = 0;
+        this.selectorScore = document.querySelector('.score p');
 
-        const distToTraverse = window.innerWidth * 0.5;
+        const distToTraverse = window.innerWidth * 0.5 + 40;
         const offset = window.innerWidth * 0.5;
         this.distP1 = offset - distToTraverse;
         this.distP2 = offset + distToTraverse;
@@ -55,15 +56,18 @@ export default class Game {
         // Need click to allow audioContext, remove when startingpage completed
         // player1.buttons[0].addEventListener('keydown', this.setMelodyPlayer);
 
+        this.player1 = new Player(1, this.selectorScore);
+        this.player2 = new Player(2, this.selectorScore);
+
         this.setMelodyPlayer();
 
-        player1.buttons[0].addEventListener('keydown', this.setIntroScene);
+        this.player1.instance.buttons[0].addEventListener('keydown', this.setIntroScene);
     }
 
     setIntroScene() {
         const intro = new Intro();
         intro.init();
-        player1.buttons[0].removeEventListener('keydown', this.setIntroScene);
+        this.player1.instance.buttons[0].removeEventListener('keydown', this.setIntroScene);
     }
 
     startGame() {
@@ -71,13 +75,14 @@ export default class Game {
         this.setStaticObjects();
         //this.melodyPlayer.startNewWave(107);
         this.melodyPlayer.startNewWave(110);
+        document.querySelector('.score').classList.toggle('active');
     }
 
     setMelodyPlayer() {
         if (!this.melodyPlayer) {
             //this.melodyPlayer = new MelodyPlayer(107);
             this.melodyPlayer = new MelodyPlayer(110);
-            player1.buttons[0].removeEventListener('keydown', this.setMelodyPlayer);
+            this.player1.instance.buttons[0].removeEventListener('keydown', this.setMelodyPlayer);
         }
     }
 
@@ -113,13 +118,14 @@ export default class Game {
     }
 
     update(playerID) {
-        if (this.targets.length >= 0) return;
-        if (!this.targets[playerID]) return;
+        // Check if targets exist for the player
+        if (!this.targets || !this.targets[playerID]) return;
         if (this.targets[playerID].length === 0) return;
 
+        // Loop through all targets for the player and call move()
         for (let i = 0; i < this.targets[playerID].length; i++) {
             const target = this.targets[playerID][i];
-            if (!target) return;
+            if (!target) continue; // Use continue instead of return to handle multiple targets
             target.move();
         }
     }

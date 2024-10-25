@@ -50,7 +50,7 @@ export default class MelodyPlayer {
      */
 
     fetchMelody() {
-        fetch('../../assets/soupeWithTimings.MID')
+        fetch('../../assets/PLAYER1.mid')
             .then((response) => response.arrayBuffer())
             .then((arrayBuffer) => {
                 this.player.loadArrayBuffer(arrayBuffer);
@@ -82,7 +82,7 @@ export default class MelodyPlayer {
 
         this.player.on('midiEvent', (note) => {
             if (note.noteName) {
-                if (note.name === 'Note on' && note.track === 2) {
+                if (note.name === 'Note on' && note.track === 1) {
                     this.instrument.start({
                         note: note.noteNumber,
                         velocity: 80,
@@ -111,7 +111,7 @@ export default class MelodyPlayer {
      */
 
     createRandomChoux() {
-        const rythmTrack = this.player.tracks[1];
+        const rythmTrack = this.player.tracks[0];
         const events = rythmTrack.events;
         let indexBeat = 0;
         const timeBeat = (60 / this.tempo) * 1000;
@@ -133,13 +133,13 @@ export default class MelodyPlayer {
         }
 
         events.filter((e) => {
-            if (e.name === 'Note on' && e.track == 2) {
+            if (e.name === 'Note on' && e.track == 1) {
                 if (!objBeats[indexBeat + 1]) {
                     objBeats[indexBeat + 1] = [];
                 }
                 incrementBeat(e);
             }
-            return e.name === 'Note on' && e.track == 2;
+            return e.name === 'Note on' && e.track == 1;
         });
 
         Object.keys(objBeats).forEach((key, idx) => {

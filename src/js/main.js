@@ -1,8 +1,8 @@
-import { setUpButtons, player1, player2 } from './BorneManager/borneManager.js';
+import { setUpButtons } from './BorneManager/borneManager.js';
 import Game from './Objects/Game.js';
 import * as PIXI from 'pixi.js';
 import { debounce } from './utils/debounce.js';
-import { longFarts, smallFarts, timelineY } from './settings.js';
+import { longFarts, smallFarts, hitRange } from './settings.js';
 import animationOuiJSON from '../assets/lottie/oui-opti.json';
 import animationNonJSON from '../assets/lottie/non-opti.json';
 import { DotLottie } from '@lottiefiles/dotlottie-web';
@@ -35,70 +35,80 @@ const createApp = async () => {
     let playerResults = { 1: false, 2: false }; // false par défaut, indique si chaque joueur a réussi
 
     const handleButtonADown = (playerID) => {
-        // Remplacer l'appel à showProut par le stockage de résultats
-        let target = game.targets[playerID][0];
-        if (!target) return;
+        try {
+            let target = game.targets[playerID]?.[0];
+            if (!target) return;
 
-        if (target.type === 'hit') {
-            const randomFart = smallFarts[Math.floor(Math.random() * smallFarts.length)];
+            console.log(target);
+
+            const currentPosition = target.currentPosition();
+            console.log('currentPosition', currentPosition);
+            const isInRange = currentPosition >= hitRange[0] && currentPosition <= hitRange[1];
+            console.log(isInRange);
+            playerResults[playerID] = isInRange;
+
+            const fartSounds = target.type === 'hit' ? smallFarts : longFarts;
+            const randomFart = fartSounds[Math.floor(Math.random() * fartSounds.length)];
             game.audioManager.debouncedPlay(randomFart.name);
-        } else if (target.type === 'hold') {
-            const randomFart = longFarts[Math.floor(Math.random() * longFarts.length)];
-            game.audioManager.debouncedPlay(randomFart.name);
-        }
 
-        target.showFeedback();
+            target.move();
+            target.showFeedback();
 
-        // Stocker le résultat du joueur
-        playerResults[playerID] = target.isHitCorrect();
+            if (playerResults[1] && playerResults[2]) {
+                console.log(target);
+                showHitInfo(true);
+                game.score += 1;
+                game.selectorScore.innerHTML = game.score;
+            } else {
+                showHitInfo(false);
+            }
 
-        // Vérifier si les deux joueurs ont réussi
-        if (playerResults[1] && playerResults[2]) {
-            const bothHitCorrect = target.type === 'hit' || target.type === 'hold';
-            showHitInfo(bothHitCorrect);
-        }
-
-        if (target.isHitCorrect() && target.type === 'hold') {
-            game.userIsHolding = true;
-        }
-
-        if (playerID === 1) {
-            debouncedAnimateChar1();
-        }
-        if (playerID === 2) {
-            debouncedAnimateChar2();
+            if (playerID === 1) {
+                debouncedAnimateChar1();
+            } else if (playerID === 2) {
+                debouncedAnimateChar2();
+            }
+        } catch (error) {
+            console.error('Error in handleButtonADown:', error);
         }
     };
 
     const handleButtonAUp = (playerID) => {
-        const target = game.targets[playerID][0];
-        if (!target) return;
+        try {
+            const target = game.targets?.[playerID]?.[0];
+            if (!target) return;
 
-        game.userIsHolding = false;
-        target.showFeedback();
+            target.showFeedback();
 
-        // Si le joueur relâche le bouton, vérifiez le résultat et affichez l'animation appropriée
-        if (target.type === 'hold' && target.isHoldCorrect()) {
-            playerResults[playerID] = true; // Mettre à jour le résultat
-        } else {
-            playerResults[playerID] = false; // S'il n'a pas réussi
+            if (playerResults[1] && playerResults[2]) {
+                showHitInfo(true);
+            } else {
+                showHitInfo(false);
+            }
+
+            game.audioManager.clearDebouncedPlay();
+            game.audioManager.stop();
+        } catch (error) {
+            console.error('Error in handleButtonAUp:', error);
         }
-
-        // Vérifiez si les deux joueurs ont terminé leurs actions
-        if (playerResults[1] && playerResults[2]) {
-            showHitInfo(true);
-        } else {
-            showHitInfo(false);
-        }
-
-        game.audioManager.clearDebouncedPlay();
-        game.audioManager.stop();
     };
 
-    player1.buttons[0].addEventListener('keydown', () => game.hasStarted && handleButtonADown(1));
-    player1.buttons[0].addEventListener('keyup', () => game.hasStarted && handleButtonAUp(1));
-    player2.buttons[0].addEventListener('keydown', () => game.hasStarted && handleButtonADown(2));
-    player2.buttons[0].addEventListener('keyup', () => game.hasStarted && handleButtonAUp(2));
+    game.player1.instance.buttons[0].addEventListener(
+        'keydown',
+        () => game.hasStarted && handleButtonADown(1)
+    );
+    game.player1.instance.buttons[0].addEventListener(
+        'keyup',
+        () => game.hasStarted && handleButtonAUp(1)
+    );
+    game.player2.instance.buttons[0].addEventListener(
+        'keydown',
+        () => game.hasStarted && handleButtonADown(2)
+    );
+    game.player2.instance.buttons[0].addEventListener(
+        'keyup',
+        () => game.hasStarted && handleButtonAUp(2)
+    );
 
     const update = () => {
         // update targets and score for both player
