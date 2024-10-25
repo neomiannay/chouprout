@@ -33,6 +33,7 @@ const createApp = async () => {
     const debouncedAnimateChar1 = debounce(() => animateChar(1), 500);
     const debouncedAnimateChar2 = debounce(() => animateChar(2), 500);
 
+    const cursorPoint = document.querySelector('.cursor');
     // Initialize score tracking for each player
     const updateScore = (playerID, increment = true) => {
         if (increment) {
@@ -41,6 +42,12 @@ const createApp = async () => {
             game.score[`p${playerID}`] = Math.max(0, game.score[`p${playerID}`] - 1); // Decrease, ensuring score doesn't go below 0
         }
         console.log(`Player ${playerID} score: ${game.score[`p${playerID}`]}`);
+
+        // calculate the percentage of the combined score of both players and update the cursor position
+        // the max point possible is 40 (20 per player)
+        const totalScore = game.score.p1 + game.score.p2;
+        const percentage = (totalScore / 40) * 100;
+        cursorPoint.style.offsetDistance = `${100 - percentage}%`;
     };
 
     let playerResults = { 1: false, 2: false }; // false par défaut, indique si chaque joueur a réussi
@@ -49,21 +56,21 @@ const createApp = async () => {
         let target = game.targets[playerID][0];
         if (!target) return;
 
-            console.log(target);
+        console.log(target);
 
-            const currentPosition = target.currentPosition();
-            console.log('currentPosition', currentPosition);
-            const isInRange = currentPosition >= hitRange[0] && currentPosition <= hitRange[1];
-            console.log(isInRange);
-            playerResults[playerID] = isInRange;
+        const currentPosition = target.currentPosition();
+        console.log('currentPosition', currentPosition);
+        const isInRange = currentPosition >= hitRange[0] && currentPosition <= hitRange[1];
+        console.log(isInRange);
+        playerResults[playerID] = isInRange;
 
-            const fartSounds = target.type === 'hit' ? smallFarts : longFarts;
-            const randomFart = fartSounds[Math.floor(Math.random() * fartSounds.length)];
-            game.audioManager.debouncedPlay(randomFart.name);
+        const fartSounds = target.type === 'hit' ? smallFarts : longFarts;
+        const randomFart = fartSounds[Math.floor(Math.random() * fartSounds.length)];
+        game.audioManager.debouncedPlay(randomFart.name);
 
-            target.move();
-            target.showFeedback();
-            
+        target.move();
+        target.showFeedback();
+
         if (playerResults[playerID]) {
             updateScore(playerID, true); // Increase score if player succeeds
         } else {

@@ -144,20 +144,10 @@ export default class Game {
         const scoreZone = new PIXI.Sprite(scoreZoneTexture);
         scoreZone.anchor.set(0.5, 0.5);
         scoreZone.x = hitZonePosition;
-        scoreZone.y = timelineY;
+        scoreZone.y = timelineY - 5;
         scoreZone.scale.set(TIMELINE_SIZE * ASPECT_RATIO);
         scoreZone.alpha = 0;
         this.app.stage.addChild(scoreZone);
-
-        // Score zone
-        const scoreCursorTexture = PIXI.Texture.from('./assets/score-cursor.svg');
-        this.scoreCursor = new PIXI.Sprite(scoreCursorTexture);
-        this.scoreCursor.anchor.set(0.5, 0.5);
-        this.scoreCursor.x = hitZonePosition;
-        this.scoreCursor.y = timelineY;
-        this.scoreCursor.scale.set(TIMELINE_SIZE * ASPECT_RATIO);
-        this.scoreCursor.alpha = 0;
-        this.app.stage.addChild(this.scoreCursor);
 
         // Timeline
         const timelineTexture = PIXI.Texture.from('./assets/timeline-background.svg');

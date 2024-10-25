@@ -14,6 +14,7 @@ export default class Intro {
         this.forest2 = document.querySelector('.background-scene__forest-2');
         this.forest3 = document.querySelector('.background-scene__forest-3');
         this.floor = document.querySelector('.background-scene__floor');
+        this.cursor = document.querySelector('.cursor');
         this.end = document.querySelector('.end');
 
         // characters
@@ -92,6 +93,7 @@ export default class Intro {
         this.floor.style.visibility = 'visible';
         this.player1.style.visibility = 'visible';
         this.player2.style.visibility = 'visible';
+        this.cursor.style.visibility = 'visible';
 
         gsap.to(this.introTuto, {
             opacity: 0,
@@ -133,6 +135,22 @@ export default class Intro {
             this.player1,
             { y: '230%' },
             { y: 0, duration: 1, delay: 1.25, ease: 'power1.out' }
+        );
+        gsap.fromTo(
+            this.cursor,
+            { opacity: 0 },
+            {
+                duration: 1,
+                delay: 1.25,
+                ease: 'power1.out',
+                onComplete: (opacity) => {
+                    gsap.to(this.cursor, {
+                        opacity: 1,
+                        duration: 0.5,
+                        ease: 'power1.out',
+                    });
+                },
+            }
         );
         gsap.fromTo(
             this.player2,

@@ -22,6 +22,19 @@
     font-display: swap;
 }
 
+.cursor {
+    z-index: var(--index-ui);
+    position: absolute;
+    top: calc(var(--vh) - (var(--vw) / 2880) * 350);
+    left: calc(var(--vw) * 0.45);
+    transform: rotate(180deg) scale(4);
+    offset-path: path(
+        'M539 197.385C522.819 155.859 473.219 84.1722 431.8 47.4285C377.189 -1.01814 263.921 -7.94008 187.06 17.4374C103.607 44.9917 17.1585 137.402 3 202'
+    );
+
+    offset-distance: 50%;
+}
+
 html,
 body {
     width: 100vw;
