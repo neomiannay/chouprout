@@ -38,6 +38,7 @@ module.exports = {
                 { from: './style.css', to: 'style.css' }, // Add this line to copy the stylesheet
                 { from: './intro.css', to: 'intro.css' }, // Add this line to copy the stylesheet
                 { from: './background.css', to: 'background.css' }, // Add this line to copy the stylesheet
+                { from: './end.css', to: 'end.css' }, // Add this line to copy the stylesheet
             ],
             {
                 ignore: [],
