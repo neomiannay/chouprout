@@ -65,10 +65,9 @@ canvas {
 }
 
 .background-wrapper {
-    border: 1px solid red;
     position: relative;
     width: 100%;
-    height: calc(100% - 2px);
+    height: 100%;
     overflow: hidden;
 }
 

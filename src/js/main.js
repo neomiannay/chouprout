@@ -45,9 +45,9 @@ const createApp = async () => {
 
         // calculate the percentage of the combined score of both players and update the cursor position
         // the max point possible is 40 (20 per player)
-        const totalScore = game.score.p1 + game.score.p2;
-        const percentage = (totalScore / 40) * 100;
-        cursorPoint.style.offsetDistance = `${100 - percentage}%`;
+        // const totalScore = game.score.p1 + game.score.p2;
+        // const percentage = (totalScore / 40) * 100;
+        // cursorPoint.style.offsetDistance = `${100 - percentage}%`;
     };
 
     let playerResults = { 1: false, 2: false }; // false par défaut, indique si chaque joueur a réussi
