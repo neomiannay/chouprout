@@ -6,6 +6,7 @@ import Intro from './Intro.js';
 import gsap from 'gsap';
 import SpriteAnimation from './SpriteAnimation.js';
 import Player from './Player.js';
+import End from './End.js';
 
 const HIT_ZONE_SIZE = 2;
 const TIMELINE_SIZE = 2;
@@ -41,6 +42,7 @@ export default class Game {
         this.notes = [];
         this.numOfTargets = 0;
         this.selectorScore = document.querySelector('.score p');
+        this.progress = 0;
 
         const distToTraverse = window.innerWidth * 0.5 + 40;
         const offset = window.innerWidth * 0.5;
@@ -229,9 +231,27 @@ export default class Game {
     // TODO: logic for checkResults & end condition
     checkResults() {}
 
-    end() {}
+    setEndScene() {
+        this.hasEnded = true;
+        const endScene = new End();
+        endScene.init();
+    }
 
     increaseSpeed(num) {
         this.speed += num;
+    }
+
+    updateProgress(currentTick) {
+        if (!this.hasStarted) return;
+
+        const songTimeRemaining = this.melodyPlayer.player.getSongPercentRemaining();
+
+        const progress = 100 - songTimeRemaining;
+
+        this.progress = progress;
+
+        if (songTimeRemaining <= 0) {
+            this.setEndScene();
+        }
     }
 }

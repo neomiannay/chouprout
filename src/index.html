@@ -5,6 +5,7 @@
         <title>Pète un coup !</title>
         <link rel="stylesheet" href="style.css" />
         <link rel="stylesheet" href="intro.css" />
+        <link rel="stylesheet" href="end.css" />
         <link rel="stylesheet" href="background.css" />
         <link rel="icon" href="./assets/icons/chou-1.svg" type="image/x-icon" />
     </head>
@@ -88,6 +89,19 @@
                 <p class="end__loose-text">Vous n'avez pas réussi à remplir la bouteille !</p>
             </div>
         </div>
+        <div class="end-game hidden">
+            <div class="victory">
+                <video class="end-video-victory__video" muted>
+                    <source src="./assets/videos/victoire.mp4" type="video/mp4" />
+                </video>
+            </div>
+
+            <div class="defeat">
+                <video class="end-video-defeat__video" muted>
+                    <source src="./assets/videos/screamer.mp4" type="video/mp4" />
+                </video>
+            </div>
+        </div>
         <svg
             width="13"
             height="12"
@@ -101,6 +115,7 @@
                 stroke="#EAD12F"
             />
         </svg>
+
         <div class="active char char1 hidden"></div>
         <div class="active char char2 hidden"></div>
         <div class="char char1Fart"></div>

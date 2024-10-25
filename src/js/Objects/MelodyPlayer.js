@@ -43,6 +43,7 @@ export default class MelodyPlayer {
 
         this.instrument = new Soundfont(this.context, {
             instrument: 'acoustic_grand_piano',
+            volume: 125,
         });
 
         this.fetchMelody();
@@ -54,7 +55,7 @@ export default class MelodyPlayer {
      */
 
     fetchMelody() {
-        fetch('../../assets/PLAYER1.mid')
+        fetch('../../assets/player1-2.mid')
             .then((response) => response.arrayBuffer())
             .then((arrayBuffer) => {
                 this.player.loadArrayBuffer(arrayBuffer);
@@ -69,6 +70,7 @@ export default class MelodyPlayer {
 
         this.player.on('playing', () => {
             this.currentTick = this.player.tick;
+            this.game.updateProgress(this.currentTick);
         });
 
         // //A REMOVE, C'EST PAS PROPRE, C'EST UN LOOP DE LA MELLODY POUR LA DEMO
@@ -126,11 +128,12 @@ export default class MelodyPlayer {
 
         function incrementBeat(e) {
             const i = indexBeat * tTick;
-            const i2 = (indexBeat + 1) * tTick;
+            const i2 = (indexBeat + 3) * tTick;
+
             if (i <= e.tick && i2 > e.tick) {
                 objBeats[indexBeat + 1].push(e);
             } else {
-                indexBeat++;
+                indexBeat += 3;
                 objBeats[indexBeat + 1] = [];
                 incrementBeat(e);
             }

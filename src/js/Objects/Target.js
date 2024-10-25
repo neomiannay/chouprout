@@ -111,7 +111,7 @@ export default class Target {
         this._timeSinceLastBeat = this._currentTime - this._lastBeatTime;
 
         const shouldMove =
-            this._iBeat === this._indexTargetBeat - 1 &&
+            this._iBeat === this._indexTargetBeat - 3 &&
             this._objectBeat[this._iBeat] &&
             this._objectBeat[this._iBeat].length > 0;
 
