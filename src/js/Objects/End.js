@@ -26,7 +26,7 @@ export default class End {
         const gameScore = this.game.score.p1 + this.game.score.p2;
 
         console.log(gameScore);
-        if (gameScore >= 20) {
+        if (gameScore >= 30) {
             console.log('victory');
             this.endVideoVictory.style.visibility = 'visible';
             this.playVictory();
