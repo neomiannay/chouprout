@@ -29,6 +29,10 @@ export default class MelodyPlayer {
             this.player.setTempo(this.tempo);
         });
 
+        this.player.on('endOfFile', () => {
+            console.log('end of file');
+        });
+
         this.context = new AudioContext();
 
         /**
@@ -143,34 +147,14 @@ export default class MelodyPlayer {
             if (note.tick > lastChouStartTime + lastChouDuration + 1000) {
                 //Add random to choux's creation, avoiding getting the same pattern
                 if (Math.random() > 1 / 3) {
-                    const chouTypeIndice = Math.floor(Math.random() * 1.99);
-                    if (chouTypeIndice === 0) {
-                        //Chou type === Hit
-                        choux.push({
-                            type: 'hit',
-                            tick: note.tick,
-                            duration: 0,
-                        });
-                        lastChouStartTime = note.tick;
-                        lastChouDuration = 0;
-                    } else if (chouTypeIndice === 1) {
-                        //Chou type === Hold
-
-                        /**
-                         * TODO : Create choux duration logic
-                         *
-                         */
-
-                        const chouDuration = Math.random() * 2000 + 1000;
-
-                        choux.push({
-                            type: 'hold',
-                            tick: note.tick,
-                            duration: chouDuration,
-                        });
-                        lastChouStartTime = note.tick;
-                        lastChouDuration = chouDuration;
-                    }
+                    //Chou type === Hit
+                    choux.push({
+                        type: 'hit',
+                        tick: note.tick,
+                        duration: 0,
+                    });
+                    lastChouStartTime = note.tick;
+                    lastChouDuration = 0;
                 }
             }
         }

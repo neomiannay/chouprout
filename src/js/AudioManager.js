@@ -1,12 +1,14 @@
-import { smallFarts, longFarts } from "./settings";
-import { debounce } from './utils/debounce.js'
+import { smallFarts, longFarts, thunders, hitInfo } from './settings';
+import { debounce } from './utils/debounce.js';
 
 export class AudioManager {
     constructor() {
         this.sounds = {};
         this.loaded = {};
-        this.preloadSounds(smallFarts)
-        this.preloadSounds(longFarts)
+        this.preloadSounds(smallFarts);
+        this.preloadSounds(longFarts);
+        this.preloadSounds(thunders);
+        this.preloadSounds(hitInfo);
         this.debouncedPlay = debounce(this.play.bind(this), 1000);
         this.activeSounds = [];
     }
@@ -19,7 +21,7 @@ export class AudioManager {
     }
 
     preloadSounds(soundList) {
-        soundList.forEach(sound => {
+        soundList.forEach((sound) => {
             this.loadSound(sound.name, sound.src);
             this.sounds[sound.name].load();
             this.loaded[sound.name] = true;
@@ -34,13 +36,18 @@ export class AudioManager {
         }
     }
 
-
     stop() {
-        this.activeSounds.forEach(audio => {
+        this.activeSounds.forEach((audio) => {
             audio.pause();
             audio.currentTime = 0;
         });
         this.activeSounds = [];
+    }
+
+    setVolume(volume) {
+        Object.values(this.sounds).forEach((audio) => {
+            audio.volume = volume;
+        });
     }
 
     clearDebouncedPlay() {

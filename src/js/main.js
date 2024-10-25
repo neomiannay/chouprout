@@ -6,6 +6,7 @@ import { longFarts, smallFarts, timelineY } from './settings.js';
 import animationOuiJSON from '../assets/lottie/oui-opti.json';
 import animationNonJSON from '../assets/lottie/non-opti.json';
 import { DotLottie } from '@lottiefiles/dotlottie-web';
+import SpriteAnimation from './Objects/SpriteAnimation.js';
 
 const createApp = async () => {
     // Create a new PixiJS application to handle canvas rendering
@@ -32,34 +33,37 @@ const createApp = async () => {
     const debouncedAnimateChar1 = debounce(() => animateChar(1), 500);
     const debouncedAnimateChar2 = debounce(() => animateChar(2), 500);
 
+    // Initialize score tracking for each player
+    const updateScore = (playerID, increment = true) => {
+        if (increment) {
+            game.score[`p${playerID}`] += 1; // Increase score for the player
+        } else {
+            game.score[`p${playerID}`] = Math.max(0, game.score[`p${playerID}`] - 1); // Decrease, ensuring score doesn't go below 0
+        }
+        console.log(`Player ${playerID} score: ${game.score[`p${playerID}`]}`);
+    };
+
     let playerResults = { 1: false, 2: false }; // false par défaut, indique si chaque joueur a réussi
 
     const handleButtonADown = (playerID) => {
-        // Remplacer l'appel à showProut par le stockage de résultats
         let target = game.targets[playerID][0];
         if (!target) return;
 
-        if (target.type === 'hit') {
-            const randomFart = smallFarts[Math.floor(Math.random() * smallFarts.length)];
-            game.audioManager.debouncedPlay(randomFart.name);
-        } else if (target.type === 'hold') {
-            const randomFart = longFarts[Math.floor(Math.random() * longFarts.length)];
-            game.audioManager.debouncedPlay(randomFart.name);
-        }
-
+        const randomFart = smallFarts[Math.floor(Math.random() * smallFarts.length)];
+        game.audioManager.debouncedPlay(randomFart.name);
         target.showFeedback();
 
-        // Stocker le résultat du joueur
         playerResults[playerID] = target.isHitCorrect();
 
-        // Vérifier si les deux joueurs ont réussi
-        if (playerResults[1] && playerResults[2]) {
-            const bothHitCorrect = target.type === 'hit' || target.type === 'hold';
-            showHitInfo(bothHitCorrect);
+        if (playerResults[playerID]) {
+            updateScore(playerID, true); // Increase score if player succeeds
+        } else {
+            updateScore(playerID, false); // Optionally decrease score if player fails
         }
 
-        if (target.isHitCorrect() && target.type === 'hold') {
-            game.userIsHolding = true;
+        if (playerResults[1] && playerResults[2]) {
+            const bothHitCorrect = target.type === 'hit';
+            showHitInfo(bothHitCorrect);
         }
 
         if (playerID === 1) {
@@ -77,14 +81,7 @@ const createApp = async () => {
         game.userIsHolding = false;
         target.showFeedback();
 
-        // Si le joueur relâche le bouton, vérifiez le résultat et affichez l'animation appropriée
-        if (target.type === 'hold' && target.isHoldCorrect()) {
-            playerResults[playerID] = true; // Mettre à jour le résultat
-        } else {
-            playerResults[playerID] = false; // S'il n'a pas réussi
-        }
-
-        // Vérifiez si les deux joueurs ont terminé leurs actions
+        // Check if both players are done
         if (playerResults[1] && playerResults[2]) {
             showHitInfo(true);
         } else {
@@ -101,7 +98,7 @@ const createApp = async () => {
     player2.buttons[0].addEventListener('keyup', () => game.hasStarted && handleButtonAUp(2));
 
     const update = () => {
-        // update targets and score for both player
+        // Update targets and score for both players
         game.updateAll();
     };
 
@@ -112,7 +109,7 @@ const createApp = async () => {
         app.renderer.resize(window.innerWidth, window.innerHeight);
     });
 
-    let currentLottieAnim = null; // Store the current Lottie animation instance
+    let currentLottieAnim = null;
 
     // was before the showProut function
     const showHitInfo = (succed) => {
@@ -127,6 +124,21 @@ const createApp = async () => {
             loop: false,
             autoplay: true,
         });
+
+        if (succed) {
+            const indexPlayer = Math.floor(Math.random() * 2) + 1; // 1 or 2
+            const spriteSetRandom = Math.floor(Math.random() * 3) + 1; // 1, 2 or 3
+            const animation = new SpriteAnimation(
+                app,
+                indexPlayer,
+                `thunder-${spriteSetRandom}`,
+                Math.random() * 0.5 + 0.5,
+                true
+            );
+            animation.init().then(() => {
+                animation.playAnimation();
+            });
+        }
     };
 };
 createApp();

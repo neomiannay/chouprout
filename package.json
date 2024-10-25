@@ -1,45 +1,45 @@
 {
-  "name": "pixi-webpack-demo",
-  "version": "1.0.0",
-  "description": "make pixi.js game with webpack",
-  "main": "src/js/main.js",
-  "keywords": [
-    "pixi.js",
-    "webpack"
-  ],
-  "author": "yulijun",
-  "license": "MIT",
-  "scripts": {
-    "start": "cross-env NODE_ENV=development webpack-dev-server --config webpack.dev.js",
-    "clean": "rimraf dist",
-    "build": "cross-env NODE_ENV=production webpack --config webpack.prod.js"
-  },
-  "dependencies": {
-    "@babel/plugin-proposal-class-properties": "^7.18.6",
-    "@babel/runtime": "^7.8.4",
-    "@lottiefiles/dotlottie-web": "^0.35.0",
-    "axis-api": "github:gobelins-axis/axis-api",
-    "core-js": "^3.6.4",
-    "gsap": "^3.12.5",
-    "midi-player-js": "^2.0.16",
-    "pixi.js": "^5.2.1",
-    "smplr": "^0.15.1"
-  },
-  "devDependencies": {
-    "@babel/core": "^7.25.8",
-    "@babel/plugin-transform-runtime": "^7.8.3",
-    "@babel/preset-env": "^7.25.8",
-    "babel-loader": "^8.4.1",
-    "clean-webpack-plugin": "^3.0.0",
-    "copy-webpack-plugin": "^5.1.1",
-    "cross-env": "^7.0.2",
-    "html-webpack-plugin": "^3.2.0",
-    "imagemin-webpack-plugin": "^2.4.2",
-    "rimraf": "^3.0.2",
-    "webpack": "^4.41.5",
-    "webpack-cli": "^3.3.10",
-    "webpack-dev-server": "^3.10.3",
-    "webpack-merge": "^4.2.2"
-  },
-  "packageManager": "yarn@1.22.19+sha1.4ba7fc5c6e704fce2066ecbfb0b0d8976fe62447"
+    "name": "pixi-webpack-demo",
+    "version": "1.0.0",
+    "description": "make pixi.js game with webpack",
+    "main": "src/js/main.js",
+    "keywords": [
+        "pixi.js",
+        "webpack"
+    ],
+    "author": "yulijun",
+    "license": "MIT",
+    "scripts": {
+        "start": "cross-env NODE_ENV=development webpack-dev-server --config webpack.dev.js",
+        "clean": "rimraf dist",
+        "build": "cross-env NODE_ENV=production webpack --config webpack.prod.js"
+    },
+    "dependencies": {
+        "@babel/plugin-proposal-class-properties": "^7.18.6",
+        "@babel/runtime": "^7.8.4",
+        "@lottiefiles/dotlottie-web": "^0.35.0",
+        "axis-api": "github:gobelins-axis/axis-api",
+        "core-js": "^3.6.4",
+        "gsap": "^3.12.5",
+        "midi-player-js": "^2.0.16",
+        "pixi.js": "^5.2.1",
+        "smplr": "^0.15.1"
+    },
+    "devDependencies": {
+        "@babel/core": "^7.25.8",
+        "@babel/plugin-transform-runtime": "^7.8.3",
+        "@babel/preset-env": "^7.25.8",
+        "babel-loader": "^8.4.1",
+        "clean-webpack-plugin": "^3.0.0",
+        "copy-webpack-plugin": "^5.1.1",
+        "cross-env": "^7.0.2",
+        "html-webpack-plugin": "^3.2.0",
+        "imagemin-webpack-plugin": "^2.4.2",
+        "rimraf": "^3.0.2",
+        "webpack": "^4.41.5",
+        "webpack-cli": "^3.3.10",
+        "webpack-dev-server": "^3.10.3",
+        "webpack-merge": "^4.2.2"
+    },
+    "packageManager": "yarn@1.22.19+sha1.4ba7fc5c6e704fce2066ecbfb0b0d8976fe62447"
 }

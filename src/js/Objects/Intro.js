@@ -15,6 +15,7 @@ export default class Intro {
         this.forest2 = document.querySelector('.background-scene__forest-2');
         this.forest3 = document.querySelector('.background-scene__forest-3');
         this.floor = document.querySelector('.background-scene__floor');
+        this.end = document.querySelector('.end');
 
         // characters
         this.player1 = document.querySelector('.char1');

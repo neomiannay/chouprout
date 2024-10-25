@@ -79,6 +79,13 @@ canvas {
     height: 100%;
 }
 
+.end {
+    z-index: var(--index-ui);
+    position: fixed;
+    width: 100%;
+    height: 100%;
+}
+
 .char1 {
     background-image: url('./assets/images/characters/red-rest.png');
 }
