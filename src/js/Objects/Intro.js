@@ -1,5 +1,4 @@
 import { gsap } from 'gsap';
-import { player1 } from '../BorneManager/borneManager';
 import Game from './Game';
 
 export default class Intro {
@@ -74,7 +73,7 @@ export default class Intro {
         this.introTuto.style.visibility = 'visible';
         gsap.fromTo(this.introTuto, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5 });
 
-        player1.buttons[0].addEventListener('keydown', this.animateParallax);
+        this.game.player1.instance.buttons[0].addEventListener('keydown', this.animateParallax);
     }
 
     // Fonction pour animer le parallax
@@ -151,6 +150,6 @@ export default class Intro {
         );
 
         // Supprime l'écouteur d'événement pour éviter les doublons
-        player1.buttons[0].removeEventListener('keydown', this.animateParallax);
+        this.game.player1.instance.buttons[0].removeEventListener('keydown', this.animateParallax);
     }
 }

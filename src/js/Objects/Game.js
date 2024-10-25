@@ -1,20 +1,11 @@
 import * as PIXI from 'pixi.js';
-import {
-    radius,
-    hitZonePosition,
-    numOfTargets,
-    timelineY,
-    arrowTypes,
-    startSpeed,
-    ASPECT_RATIO,
-} from '../settings.js';
-import Hit from './Hit.js';
+import { hitZonePosition, timelineY, startSpeed, ASPECT_RATIO } from '../settings.js';
 import MelodyPlayer from './MelodyPlayer.js';
 import { AudioManager } from '../AudioManager.js';
-import { player1 } from '../BorneManager/borneManager.js';
 import Intro from './Intro.js';
 import gsap from 'gsap';
 import SpriteAnimation from './SpriteAnimation.js';
+import Player from './Player.js';
 
 const HIT_ZONE_SIZE = 2;
 const TIMELINE_SIZE = 2;
@@ -30,14 +21,13 @@ export default class Game {
         this.isDone = false;
         this.playersHaveLost = false;
         this.targetsContainer = new PIXI.Container();
-        this.targets = {};
+        this.targets = { 1: [], 2: [] };
         // TODO: keep two arrays, one per player and keep track for each target of success.
         // Example : if player1 has hit the two first targets correctly and misses the third score should be score {1: [1, 1, 0] }
         // At the end of a sequence compute points by looping through both arrays and check both player have a score of 1 at index i to grant a point.
         // defeat condition should be if 90% of targets have been hit correctly by both players
         this.score = { p1: 10, p2: 10 };
         this.app = app;
-        this.userIsHolding = false;
         this.speed = startSpeed;
         this.audioManager = new AudioManager();
         this.setMelodyPlayer = this.setMelodyPlayer.bind(this);
@@ -45,14 +35,26 @@ export default class Game {
         this.setupAnimation = this.setupAnimation.bind(this);
         this.melodyPlayer = null;
         this.scoreCursor = null;
+        this.notes = [];
+        this.numOfTargets = 0;
+        this.selectorScore = document.querySelector('.score p');
+
+        const distToTraverse = window.innerWidth * 0.5 + 40;
+        const offset = window.innerWidth * 0.5;
+        this.distP1 = offset - distToTraverse;
+        this.distP2 = offset + distToTraverse;
         Game.instance = this;
     }
 
     init() {
-        player1.buttons[0].addEventListener('keydown', this.setIntroScene);
+        this.player1 = new Player(1);
+        this.player2 = new Player(2);
+
+        this.player1.instance.buttons[0].addEventListener('keydown', this.setIntroScene);
         this.app.stage.addChild(this.targetsContainer);
 
-        player1.buttons[1].addEventListener('keydown', this.setupAnimation);
+        this.player1.instance.buttons[1].addEventListener('keydown', this.setupAnimation);
+        this.setMelodyPlayer();
     }
 
     increaseScore(playerID) {
@@ -115,22 +117,24 @@ export default class Game {
     }
 
     setIntroScene() {
-        console.log('ntm');
         const intro = new Intro();
         intro.init();
-        player1.buttons[0].removeEventListener('keydown', this.setIntroScene);
+        this.player1.instance.buttons[0].removeEventListener('keydown', this.setIntroScene);
     }
 
     startGame() {
-        this.setMelodyPlayer();
-        this.createTargets();
+        this.hasStarted = true;
         this.setStaticObjects();
+        //this.melodyPlayer.startNewWave(107);
+        this.melodyPlayer.startNewWave(110);
+        document.querySelector('.score').classList.toggle('active');
     }
 
     setMelodyPlayer() {
         if (!this.melodyPlayer) {
-            this.melodyPlayer = new MelodyPlayer(90);
-            player1.buttons[0].removeEventListener('keydown', this.setMelodyPlayer);
+            //this.melodyPlayer = new MelodyPlayer(107);
+            this.melodyPlayer = new MelodyPlayer(110);
+            this.player1.instance.buttons[0].removeEventListener('keydown', this.setMelodyPlayer);
         }
     }
 
@@ -189,72 +193,17 @@ export default class Game {
         lottieContainer.style.height = `${crossProductH}px`;
     }
 
-    createTargets() {
-        let length = 0;
-        let type = 1;
-        let targetsPlayer1 = [];
-        let targetsPlayer2 = [];
-        let xPos1 = 0;
-        let xPos2 = window.innerWidth;
-
-        // player one
-        for (let i = 0; i < numOfTargets; i++) {
-            type = 0;
-            length = Math.random() * 100 + 100;
-
-            // for hit target
-            xPos1 -= radius * 2;
-            xPos2 += radius * 2;
-            targetsPlayer1[i] = new Hit(
-                this.targetsContainer,
-                'left',
-                i,
-                xPos1,
-                1,
-                arrowTypes[Math.floor(Math.random() * 4)]
-            );
-            targetsPlayer2[i] = new Hit(
-                this.targetsContainer,
-                'left',
-                i,
-                xPos2,
-                2,
-                arrowTypes[Math.floor(Math.random() * 4)]
-            );
-        }
-        this.targets[1] = targetsPlayer1;
-        this.targets[2] = targetsPlayer2;
-    }
-
     update(playerID) {
+        // Check if targets exist for the player
+        if (!this.targets || !this.targets[playerID]) return;
         if (this.targets[playerID].length === 0) return;
-        if (!this.targets[playerID]) return;
+
+        // Loop through all targets for the player and call move()
         for (let i = 0; i < this.targets[playerID].length; i++) {
             const target = this.targets[playerID][i];
-            if (!target) return;
-            if (target.type === 'hit') target.move();
+            if (!target) continue; // Use continue instead of return to handle multiple targets
+            target.move();
         }
-        const currTarget = this.targets[playerID][0];
-        if (currTarget.isMissed()) {
-            currTarget.remove();
-            this.targets[playerID].splice(0, 1);
-        }
-    }
-
-    moveScoreCursor() {
-        // Calculer le score combiné
-        const combinedScore = this.score.p1 + this.score.p2;
-
-        // Normaliser le score (0 à 20) vers -90 à 90 degrés
-        const normalizedScore = Math.max(0, Math.min(combinedScore, 20)); // Limiter à 20
-        const angle = (normalizedScore / 20) * 180 - 90; // Convertir en angle
-
-        console.log(this.scoreCursor);
-
-        // Mettre à jour la position du curseur
-        this.scoreCursor.rotation = (angle * Math.PI) / 180;
-        this.scoreCursor.x = hitZonePosition + Math.cos(this.scoreCursor.rotation) * 100;
-        this.scoreCursor.y = timelineY + Math.sin(this.scoreCursor.rotation) * 100;
     }
 
     updateAll() {

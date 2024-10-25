@@ -1,6 +1,7 @@
 import MidiPlayer from 'midi-player-js';
 import { Soundfont } from 'smplr';
 import Game from './Game';
+import Target from './Target';
 
 //Onjectif de cette class : Analyser le fichier midi pour timer l'apparition des choux
 
@@ -41,7 +42,7 @@ export default class MelodyPlayer {
          */
 
         this.instrument = new Soundfont(this.context, {
-            instrument: 'kalimba',
+            instrument: 'acoustic_grand_piano',
         });
 
         this.fetchMelody();
@@ -53,11 +54,10 @@ export default class MelodyPlayer {
      */
 
     fetchMelody() {
-        fetch('../../assets/soupeWithTimings.MID')
+        fetch('../../assets/PLAYER1.mid')
             .then((response) => response.arrayBuffer())
             .then((arrayBuffer) => {
                 this.player.loadArrayBuffer(arrayBuffer);
-                this.startNewWave(this.tempo);
             })
             .catch((error) => {
                 console.error('Error loading the MIDI file:', error);
@@ -86,7 +86,7 @@ export default class MelodyPlayer {
 
         this.player.on('midiEvent', (note) => {
             if (note.noteName) {
-                if (note.name === 'Note on' && note.track === 2) {
+                if (note.name === 'Note on' && note.track === 1) {
                     this.instrument.start({
                         note: note.noteNumber,
                         velocity: 80,
@@ -105,9 +105,8 @@ export default class MelodyPlayer {
 
     startNewWave(tempo) {
         this.tempo = tempo;
+        this.intervalBetweenBeats = (60 / this.tempo) * 1000;
         this.createRandomChoux();
-        this.player.playLoop();
-        this.player.play();
     }
 
     /**
@@ -116,50 +115,48 @@ export default class MelodyPlayer {
      */
 
     createRandomChoux() {
-        const choux = [];
+        const rythmTrack = this.player.tracks[0];
+        const events = rythmTrack.events;
+        let indexBeat = 0;
+        const timeBeat = (60 / this.tempo) * 1000;
+        const objBeats = {};
 
-        /**
-         * On récupère la track 3 du fichier MID, qui est la track sur laquelle on à créer des notes qui donne le tempo
-         * de la melody, et qui réprésente des timings sur lesquels on peut accrocher des choux
-         */
+        const a = this.player.totalTicks / (this.player.getSongTime() * 1000);
+        const tTick = a * timeBeat;
 
-        const rythmTrack = this.player.tracks[2];
-        const rythmNotes = [];
-
-        /**
-         * On push tout les event "Note on" de la track du tempo
-         */
-
-        for (const note of rythmTrack.events) {
-            if (note.name === 'Note on') {
-                rythmNotes.push(note);
+        function incrementBeat(e) {
+            const i = indexBeat * tTick;
+            const i2 = (indexBeat + 1) * tTick;
+            if (i <= e.tick && i2 > e.tick) {
+                objBeats[indexBeat + 1].push(e);
+            } else {
+                indexBeat++;
+                objBeats[indexBeat + 1] = [];
+                incrementBeat(e);
             }
         }
 
-        /**
-         * Les deux valeurs ci-dessous permette de ne pas avoir des choux qui se superposent
-         */
-
-        let lastChouStartTime = 0;
-        let lastChouDuration = 0;
-
-        for (const note of rythmNotes) {
-            if (note.tick > lastChouStartTime + lastChouDuration + 1000) {
-                //Add random to choux's creation, avoiding getting the same pattern
-                if (Math.random() > 1 / 3) {
-                    //Chou type === Hit
-                    choux.push({
-                        type: 'hit',
-                        tick: note.tick,
-                        duration: 0,
-                    });
-                    lastChouStartTime = note.tick;
-                    lastChouDuration = 0;
+        events.filter((e) => {
+            if (e.name === 'Note on' && e.track == 1) {
+                if (!objBeats[indexBeat + 1]) {
+                    objBeats[indexBeat + 1] = [];
                 }
+                incrementBeat(e);
             }
-        }
+            return e.name === 'Note on' && e.track == 1;
+        });
 
-        //Array d'object avec un type de chou, sa duration, et le timing auxquels il est censé être interagit
-        // console.log(choux);
+        Object.keys(objBeats).forEach((key, idx) => {
+            this.game.targets[1].push(
+                new Target(0, this.game.distP1, 1, key, this.intervalBetweenBeats, objBeats)
+            );
+            this.game.targets[2].push(
+                new Target(0, this.game.distP2, 2, key, this.intervalBetweenBeats, objBeats)
+            );
+        });
+
+        setTimeout(() => {
+            this.player.play();
+        }, this.intervalBetweenBeats * 3);
     }
 }

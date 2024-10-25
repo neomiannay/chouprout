@@ -1,8 +1,8 @@
-import { setUpButtons, player1, player2 } from './BorneManager/borneManager.js';
+import { setUpButtons } from './BorneManager/borneManager.js';
 import Game from './Objects/Game.js';
 import * as PIXI from 'pixi.js';
 import { debounce } from './utils/debounce.js';
-import { longFarts, smallFarts, timelineY } from './settings.js';
+import { longFarts, smallFarts, hitRange } from './settings.js';
 import animationOuiJSON from '../assets/lottie/oui-opti.json';
 import animationNonJSON from '../assets/lottie/non-opti.json';
 import { DotLottie } from '@lottiefiles/dotlottie-web';
@@ -49,12 +49,21 @@ const createApp = async () => {
         let target = game.targets[playerID][0];
         if (!target) return;
 
-        const randomFart = smallFarts[Math.floor(Math.random() * smallFarts.length)];
-        game.audioManager.debouncedPlay(randomFart.name);
-        target.showFeedback();
+            console.log(target);
 
-        playerResults[playerID] = target.isHitCorrect();
+            const currentPosition = target.currentPosition();
+            console.log('currentPosition', currentPosition);
+            const isInRange = currentPosition >= hitRange[0] && currentPosition <= hitRange[1];
+            console.log(isInRange);
+            playerResults[playerID] = isInRange;
 
+            const fartSounds = target.type === 'hit' ? smallFarts : longFarts;
+            const randomFart = fartSounds[Math.floor(Math.random() * fartSounds.length)];
+            game.audioManager.debouncedPlay(randomFart.name);
+
+            target.move();
+            target.showFeedback();
+            
         if (playerResults[playerID]) {
             updateScore(playerID, true); // Increase score if player succeeds
         } else {
@@ -68,17 +77,15 @@ const createApp = async () => {
 
         if (playerID === 1) {
             debouncedAnimateChar1();
-        }
-        if (playerID === 2) {
+        } else if (playerID === 2) {
             debouncedAnimateChar2();
         }
     };
 
     const handleButtonAUp = (playerID) => {
-        const target = game.targets[playerID][0];
+        const target = game.targets?.[playerID]?.[0];
         if (!target) return;
 
-        game.userIsHolding = false;
         target.showFeedback();
 
         // Check if both players are done
@@ -86,16 +93,27 @@ const createApp = async () => {
             showHitInfo(true);
         } else {
             showHitInfo(false);
+            game.audioManager.clearDebouncedPlay();
+            game.audioManager.stop();
         }
-
-        game.audioManager.clearDebouncedPlay();
-        game.audioManager.stop();
     };
 
-    player1.buttons[0].addEventListener('keydown', () => game.hasStarted && handleButtonADown(1));
-    player1.buttons[0].addEventListener('keyup', () => game.hasStarted && handleButtonAUp(1));
-    player2.buttons[0].addEventListener('keydown', () => game.hasStarted && handleButtonADown(2));
-    player2.buttons[0].addEventListener('keyup', () => game.hasStarted && handleButtonAUp(2));
+    game.player1.instance.buttons[0].addEventListener(
+        'keydown',
+        () => game.hasStarted && handleButtonADown(1)
+    );
+    game.player1.instance.buttons[0].addEventListener(
+        'keyup',
+        () => game.hasStarted && handleButtonAUp(1)
+    );
+    game.player2.instance.buttons[0].addEventListener(
+        'keydown',
+        () => game.hasStarted && handleButtonADown(2)
+    );
+    game.player2.instance.buttons[0].addEventListener(
+        'keyup',
+        () => game.hasStarted && handleButtonAUp(2)
+    );
 
     const update = () => {
         // Update targets and score for both players
