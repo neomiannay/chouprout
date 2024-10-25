@@ -15,7 +15,6 @@ export default class Intro {
         this.forest3 = document.querySelector('.background-scene__forest-3');
         this.floor = document.querySelector('.background-scene__floor');
         this.cursor = document.querySelector('.cursor');
-        this.end = document.querySelector('.end');
 
         // characters
         this.player1 = document.querySelector('.char1');
@@ -39,42 +38,45 @@ export default class Intro {
                 this.introHome.style.visibility = 'hidden';
 
                 // Animation fade-in de l'intro-video
-                // this.introVideo.style.visibility = 'visible';
-                // gsap.fromTo(
-                //     this.introVideo,
-                //     { opacity: 0, y: 20 },
-                //     { opacity: 1, y: 0, duration: 0.5 }
-                // );
-                // this.videoElement.play();
+                this.introVideo.style.visibility = 'visible';
+                gsap.fromTo(
+                    this.introVideo,
+                    { opacity: 0, y: 20 },
+                    { opacity: 1, y: 0, duration: 0.5 }
+                );
+                this.videoElement.play();
             },
         });
 
         // // Transition après la fin de la vidéo
-        // this.videoElement.addEventListener('ended', () => {
-        //     gsap.to(this.introVideo, {
-        //         opacity: 0,
-        //         y: -20,
-        //         duration: 0.5,
-        //         onComplete: () => {
-        //             this.introVideo.style.visibility = 'hidden';
+        this.videoElement.addEventListener('ended', () => {
+            gsap.to(this.introVideo, {
+                opacity: 0,
+                y: -20,
+                duration: 0.5,
+                onComplete: () => {
+                    this.introVideo.style.visibility = 'hidden';
 
-        //             // Animation fade-in de l'intro-tuto
-        //             this.introTuto.style.visibility = 'visible';
-        //             gsap.fromTo(
-        //                 this.introTuto,
-        //                 { opacity: 0, y: 20 },
-        //                 { opacity: 1, y: 0, duration: 0.5 }
-        //             );
+                    // Animation fade-in de l'intro-tuto
+                    this.introTuto.style.visibility = 'visible';
+                    gsap.fromTo(
+                        this.introTuto,
+                        { opacity: 0, y: 20 },
+                        { opacity: 1, y: 0, duration: 0.5 }
+                    );
 
-        //             player1.buttons[0].addEventListener('keydown', this.animateParallax);
-        //         },
-        //     });
-        // });
+                    this.game.player1.instance.buttons[0].addEventListener(
+                        'keydown',
+                        this.animateParallax
+                    );
+                },
+            });
+        });
 
-        this.introTuto.style.visibility = 'visible';
-        gsap.fromTo(this.introTuto, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5 });
+        // this.introTuto.style.visibility = 'visible';
+        // gsap.fromTo(this.introTuto, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5 });
 
-        this.game.player1.instance.buttons[0].addEventListener('keydown', this.animateParallax);
+        // this.game.player1.instance.buttons[0].addEventListener('keydown', this.animateParallax);
     }
 
     // Fonction pour animer le parallax

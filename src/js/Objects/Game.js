@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js';
-import { hitZonePosition, timelineY, startSpeed, ASPECT_RATIO } from '../settings.js';
+import { hitZonePosition, timelineY, startSpeed, ASPECT_RATIO, ui } from '../settings.js';
 import MelodyPlayer from './MelodyPlayer.js';
 import { AudioManager } from '../AudioManager.js';
 import Intro from './Intro.js';
@@ -16,6 +16,8 @@ export default class Game {
         if (Game.instance) {
             return Game.instance; // Return existing instance if already created
         }
+        this.introPressCount = 0;
+        this.introSongStarted = false;
         this.introStarted = true;
         this.hasStarted = false;
         this.isDone = false;
@@ -30,6 +32,7 @@ export default class Game {
         this.app = app;
         this.speed = startSpeed;
         this.audioManager = new AudioManager();
+        this.setIntroMusic = this.setIntroMusic.bind(this);
         this.setMelodyPlayer = this.setMelodyPlayer.bind(this);
         this.setIntroScene = this.setIntroScene.bind(this);
         this.setupAnimation = this.setupAnimation.bind(this);
@@ -50,9 +53,11 @@ export default class Game {
         this.player1 = new Player(1);
         this.player2 = new Player(2);
 
-        this.player1.instance.buttons[0].addEventListener('keydown', this.setIntroScene);
+        this.player1.instance.buttons[0].addEventListener(
+            'keydown',
+            this.handleIntroPress.bind(this)
+        );
         this.app.stage.addChild(this.targetsContainer);
-
         this.player1.instance.buttons[1].addEventListener('keydown', this.setupAnimation);
         this.setMelodyPlayer();
     }
@@ -116,10 +121,29 @@ export default class Game {
         // });
     }
 
+    handleIntroPress() {
+        this.introPressCount++;
+
+        if (this.introPressCount === 1) {
+            this.setIntroMusic();
+        } else if (this.introPressCount === 2) {
+            this.setIntroScene();
+            this.player1.instance.buttons[0].removeEventListener(
+                'keydown',
+                this.handleIntroPress.bind(this)
+            );
+        }
+    }
+
+    setIntroMusic() {
+        this.audioManager.play(ui[0].name, 0.5, true);
+        this.introSongStarted = true;
+    }
+
     setIntroScene() {
+        this.audioManager.stop();
         const intro = new Intro();
         intro.init();
-        this.player1.instance.buttons[0].removeEventListener('keydown', this.setIntroScene);
     }
 
     startGame() {
@@ -127,7 +151,7 @@ export default class Game {
         this.setStaticObjects();
         //this.melodyPlayer.startNewWave(107);
         this.melodyPlayer.startNewWave(110);
-        document.querySelector('.score').classList.toggle('active');
+        // document.querySelector('.score').classList.toggle('active');
     }
 
     setMelodyPlayer() {

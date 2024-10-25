@@ -2,7 +2,7 @@ import { setUpButtons } from './BorneManager/borneManager.js';
 import Game from './Objects/Game.js';
 import * as PIXI from 'pixi.js';
 import { debounce } from './utils/debounce.js';
-import { longFarts, smallFarts, hitRange } from './settings.js';
+import { longFarts, smallFarts, hitRange, OuiNon } from './settings.js';
 import animationOuiJSON from '../assets/lottie/oui-opti.json';
 import animationNonJSON from '../assets/lottie/non-opti.json';
 import { DotLottie } from '@lottiefiles/dotlottie-web';
@@ -66,7 +66,7 @@ const createApp = async () => {
 
         const fartSounds = target.type === 'hit' ? smallFarts : longFarts;
         const randomFart = fartSounds[Math.floor(Math.random() * fartSounds.length)];
-        game.audioManager.debouncedPlay(randomFart.name);
+        game.audioManager.play(randomFart.name, 0.1);
 
         target.move();
         target.showFeedback();
@@ -149,6 +149,8 @@ const createApp = async () => {
             loop: false,
             autoplay: true,
         });
+        const hitSucced = OuiNon.find((sound) => sound.name === (succed ? 'oui' : 'non'));
+        // game.audioManager.play(hitSucced.name, 1);
 
         if (succed) {
             const indexPlayer = Math.floor(Math.random() * 2) + 1; // 1 or 2

@@ -107,7 +107,7 @@ export default class SpriteAnimation {
 
             if (this.isRandom) {
                 const randomThunder = thunders[Math.floor(Math.random() * thunders.length)];
-                this.game.audioManager.play(randomThunder.name);
+                this.game.audioManager.play(randomThunder.name, 0.2);
             }
 
             const destroyTime = this.isRandom ? Math.random() * 1000 + 500 : 1000;

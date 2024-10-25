@@ -1,4 +1,4 @@
-import { smallFarts, longFarts, thunders, hitInfo } from './settings';
+import { smallFarts, longFarts, thunders, hitInfo, OuiNon, ui } from './settings';
 import { debounce } from './utils/debounce.js';
 
 export class AudioManager {
@@ -9,6 +9,8 @@ export class AudioManager {
         this.preloadSounds(longFarts);
         this.preloadSounds(thunders);
         this.preloadSounds(hitInfo);
+        this.preloadSounds(OuiNon);
+        this.preloadSounds(ui);
         this.debouncedPlay = debounce(this.play.bind(this), 1000);
         this.activeSounds = [];
     }
@@ -28,8 +30,10 @@ export class AudioManager {
         });
     }
 
-    play(name) {
+    play(name, volume = 1, loop = false) {
         if (this.sounds[name]) {
+            this.sounds[name].volume = volume;
+            this.sounds[name].loop = loop;
             this.sounds[name].currentTime = 0;
             this.sounds[name].play();
             this.activeSounds.push(this.sounds[name]);

@@ -29,3 +29,12 @@ export const hitInfo = [
     { name: 'oui', src: './assets/audios/oui.mp3' },
     { name: 'non', src: './assets/audios/non.mp3' },
 ];
+export const OuiNon = [
+    { name: 'oui', src: './assets/audios/oui.mp3' },
+    { name: 'non', src: './assets/audios/non.mp3' },
+];
+export const ui = [
+    { name: 'menu', src: './assets/audios/menu.mp3' },
+    { name: 'win', src: './assets/audios/win.mp3' },
+    { name: 'loose', src: './assets/audios/loose.mp3' },
+];
