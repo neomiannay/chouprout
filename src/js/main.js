@@ -41,6 +41,7 @@ const createApp = async () => {
         } else {
             game.score[`p${playerID}`] = Math.max(0, game.score[`p${playerID}`] - 1); // Decrease, ensuring score doesn't go below 0
         }
+
         console.log(`Player ${playerID} score: ${game.score[`p${playerID}`]}`);
 
         // calculate the percentage of the combined score of both players and update the cursor position
@@ -56,12 +57,8 @@ const createApp = async () => {
         let target = game.targets[playerID][0];
         if (!target) return;
 
-        console.log(target);
-
         const currentPosition = target.currentPosition();
-        console.log('currentPosition', currentPosition);
         const isInRange = currentPosition >= hitRange[0] && currentPosition <= hitRange[1];
-        console.log(isInRange);
         playerResults[playerID] = isInRange;
 
         const fartSounds = target.type === 'hit' ? smallFarts : longFarts;
